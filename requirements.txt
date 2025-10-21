@@ -1,0 +1,13 @@
+# Whisparr - AI Subtitles Generator
+# Core dependencies
+
+# OpenAI Whisper for speech recognition
+openai-whisper>=20230314
+
+# Audio/video processing
+ffmpeg-python>=0.2.0
+
+# Additional dependencies that Whisper needs
+numpy>=1.20.0
+torch>=1.10.0
+tqdm>=4.65.0

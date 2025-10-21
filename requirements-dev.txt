@@ -1,0 +1,17 @@
+# Whisparr - Development Dependencies
+
+# Include core requirements
+-r requirements.txt
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+
+# Code quality
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
+
+# Development tools
+ipython>=8.0.0
