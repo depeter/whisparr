@@ -24,6 +24,15 @@ class Config:
             "device": None,
             "compute_type": "float16"
         },
+        "translation": {
+            "enabled": False,
+            "provider": "openai",
+            "model": None,
+            "api_key": None,
+            "target_language": "English",
+            "preserve_timing": True,
+            "context_aware": True
+        },
         "subtitle": {
             "format": "srt",
             "max_line_length": 42,

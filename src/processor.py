@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import List, Optional, Callable
 from .transcriber import Transcriber, TranscriberConfig
 from .subtitle_generator import SubtitleGenerator
+from .translator import Translator, TranslatorConfig
 from .config_loader import Config
 
 logger = logging.getLogger(__name__)
@@ -35,6 +36,19 @@ class FileProcessor:
         )
         self.transcriber = Transcriber(self.transcriber_config)
         self.subtitle_generator = SubtitleGenerator()
+
+        # Initialize translator if translation is enabled
+        self.translator = None
+        if config.get("translation.enabled", False):
+            self.translator_config = TranslatorConfig(
+                provider=config.get("translation.provider", "openai"),
+                model=config.get("translation.model"),
+                api_key=config.get("translation.api_key"),
+                target_language=config.get("translation.target_language", "English"),
+                preserve_timing=config.get("translation.preserve_timing", True),
+                context_aware=config.get("translation.context_aware", True)
+            )
+            self.translator = Translator(self.translator_config)
 
     def process_file(
         self,
@@ -85,6 +99,17 @@ class FileProcessor:
 
         if progress_callback:
             progress_callback("transcribing", 100)
+
+        # Translate if enabled
+        if self.translator is not None:
+            if progress_callback:
+                progress_callback("translating", 0)
+
+            logger.info(f"Translating to {self.translator.config.target_language}")
+            segments = self.translator.translate_segments(segments)
+
+            if progress_callback:
+                progress_callback("translating", 100)
 
         # Generate subtitles
         if progress_callback:

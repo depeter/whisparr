@@ -5,12 +5,14 @@ Whisparr is an automated subtitle generation tool powered by OpenAI's Whisper mo
 ## Features
 
 - **Automatic Transcription**: Uses OpenAI's Whisper model for accurate speech-to-text conversion
+- **LLM-Powered Translation**: Translate subtitles to any language using OpenAI or Anthropic models
 - **Multiple Subtitle Formats**: Generates SRT and WebVTT subtitle files
 - **Batch Processing**: Process entire directories of video/audio files
 - **Flexible Configuration**: JSON-based configuration with CLI overrides
 - **Language Support**: Auto-detect or specify source language
 - **Multiple Model Sizes**: Choose from tiny, base, small, medium, or large Whisper models
 - **GPU Acceleration**: Optional CUDA support for faster processing
+- **Context-Aware Translation**: Maintains context across segments for better translation quality
 
 ## Installation
 
@@ -80,6 +82,30 @@ This will generate `video.srt` in the same directory.
 ./whisparr.py directory /path/to/videos --overwrite
 ```
 
+### Translation
+
+Whisparr can automatically translate subtitles to any language using LLM providers:
+
+```bash
+# Translate Spanish audio to English subtitles
+export OPENAI_API_KEY="your-api-key"
+./whisparr.py file video.mp4 --translate English
+
+# Use Anthropic Claude for translation
+export ANTHROPIC_API_KEY="your-api-key"
+./whisparr.py file video.mp4 --translate French --translate-provider anthropic
+
+# Specify translation model
+./whisparr.py file video.mp4 --translate Spanish --translate-model gpt-4o
+
+# Batch translate a directory
+./whisparr.py directory /videos --translate English --recursive
+```
+
+**Note**: Translation requires API keys set as environment variables:
+- OpenAI: `OPENAI_API_KEY`
+- Anthropic: `ANTHROPIC_API_KEY`
+
 ## Configuration
 
 ### Generate Configuration File
@@ -104,6 +130,15 @@ This will generate `video.srt` in the same directory.
     "task": "transcribe",
     "device": null,
     "compute_type": "float16"
+  },
+  "translation": {
+    "enabled": false,
+    "provider": "openai",
+    "model": null,
+    "api_key": null,
+    "target_language": "English",
+    "preserve_timing": true,
+    "context_aware": true
   },
   "subtitle": {
     "format": "srt",

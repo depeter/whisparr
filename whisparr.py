@@ -41,6 +41,15 @@ def process_file_command(args):
     if args.device:
         config.set("whisper.device", args.device)
 
+    # Translation options
+    if hasattr(args, 'translate') and args.translate:
+        config.set("translation.enabled", True)
+        config.set("translation.target_language", args.translate)
+    if hasattr(args, 'translate_provider') and args.translate_provider:
+        config.set("translation.provider", args.translate_provider)
+    if hasattr(args, 'translate_model') and args.translate_model:
+        config.set("translation.model", args.translate_model)
+
     # Setup logging
     setup_logging(args.log_level or config.get("logging.level", "INFO"))
 
@@ -74,6 +83,15 @@ def process_directory_command(args):
         config.set("whisper.device", args.device)
     if args.overwrite:
         config.set("processing.overwrite_existing", True)
+
+    # Translation options
+    if hasattr(args, 'translate') and args.translate:
+        config.set("translation.enabled", True)
+        config.set("translation.target_language", args.translate)
+    if hasattr(args, 'translate_provider') and args.translate_provider:
+        config.set("translation.provider", args.translate_provider)
+    if hasattr(args, 'translate_model') and args.translate_model:
+        config.set("translation.model", args.translate_model)
 
     # Setup logging
     setup_logging(args.log_level or config.get("logging.level", "INFO"))
@@ -150,6 +168,9 @@ Examples:
     file_parser.add_argument('-f', '--format', choices=['srt', 'vtt'], help='Subtitle format')
     file_parser.add_argument('-d', '--device', choices=['cpu', 'cuda'], help='Device to use')
     file_parser.add_argument('-c', '--config', help='Configuration file path')
+    file_parser.add_argument('--translate', help='Enable translation to target language (e.g., English, Spanish, French)')
+    file_parser.add_argument('--translate-provider', choices=['openai', 'anthropic'], help='LLM provider for translation')
+    file_parser.add_argument('--translate-model', help='LLM model for translation (e.g., gpt-4o-mini, claude-3-5-sonnet-20241022)')
     file_parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'],
                             help='Logging level')
     file_parser.set_defaults(func=process_file_command)
@@ -166,6 +187,9 @@ Examples:
     dir_parser.add_argument('-d', '--device', choices=['cpu', 'cuda'], help='Device to use')
     dir_parser.add_argument('-c', '--config', help='Configuration file path')
     dir_parser.add_argument('--overwrite', action='store_true', help='Overwrite existing subtitle files')
+    dir_parser.add_argument('--translate', help='Enable translation to target language (e.g., English, Spanish, French)')
+    dir_parser.add_argument('--translate-provider', choices=['openai', 'anthropic'], help='LLM provider for translation')
+    dir_parser.add_argument('--translate-model', help='LLM model for translation (e.g., gpt-4o-mini, claude-3-5-sonnet-20241022)')
     dir_parser.add_argument('--log-level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'],
                            help='Logging level')
     dir_parser.set_defaults(func=process_directory_command)

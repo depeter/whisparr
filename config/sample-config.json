@@ -6,6 +6,15 @@
     "device": null,
     "compute_type": "float16"
   },
+  "translation": {
+    "enabled": false,
+    "provider": "openai",
+    "model": null,
+    "api_key": null,
+    "target_language": "English",
+    "preserve_timing": true,
+    "context_aware": true
+  },
   "subtitle": {
     "format": "srt",
     "max_line_length": 42,
